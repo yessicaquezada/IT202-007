@@ -3,11 +3,18 @@ $A1 =[-1, -2, -3, -4, -5, -6, -7, -8, -9, -10];
 $B2 =[-1, 1, -2, 2, 3, -3, -4, 115];
 $C3 =[-0.03, 0.0002, -.11];
 $D4 =['-1',"hello","2","-3","-4","5","-6","6",'-7','71',"71","a"];
+
 function bePositive($arr) {
     //use the $arr variable to iterate over
     echo "<br>Processing Array: <br> <pre>". var_export($arr, True) . "</pre>";
     echo "<br>Positive Output";
+
 	//TODO echo to output any value that positive (i.e., ignore negatives and characters)
+	for($i = 0; $i < sizeof($arr); $i++)
+	{
+		echo abs((float) $arr[$i]) . " ";
+
+	}
 }
 ?>
 <h2> Problem 3: Be Positive</h2>
