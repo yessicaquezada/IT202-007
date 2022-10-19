@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "sql.njit.edu",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "IT202",
+            "database": "ysq2",
+            "username": "ysq2",
+            "password": "Bernal2002!"
+        }
+    ]
+}
