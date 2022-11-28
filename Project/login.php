@@ -53,8 +53,9 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         $hasError = true;
     }
     if (!$hasError) {
-        //echo "Welcome, $email";
+        echo "Welcome, $email";
         //TODO 4.0
+
         $db = getDB();
         $stmt = $db->prepare("SELECT email, pwrdHash from User where email = :email");
         try {
@@ -67,9 +68,8 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                     if (password_verify($password, $hash)) {
                         echo "Welcome $email";
 
-                    $_SESSION["user"] = $user;
-                    die(header("Location: home.php"));
-
+                $_SESSION["user"] = $user;
+                die(header("Location: home.php"));
                     } else {
                         echo "Invalid password";
                     }
