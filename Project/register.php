@@ -45,7 +45,8 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     }
     //sanitize
     //TODO 4.0: $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    //TODO 4.1 replace 4.0: $email = sanitize_email($email);
+    
+    $email = sanitize_email($email);
     //validate
     //TODO 4.0: if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     //TODO 4.1: if (!is_valid_email($email)) {
