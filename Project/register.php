@@ -1,6 +1,6 @@
 <?php
 //require_once(__DIR__ . "/../lib/functions.php");
-//TODO: 0.1: require_once(__DIR__ . "/../partials/nav.php");
+require_once(__DIR__ . "/../partials/nav.php");
 ?>
 <form onsubmit="return validate(this)" method="POST">
     <div>
@@ -28,15 +28,13 @@
 <?php
 //TODO 2: add PHP Code
 if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $confirm = $_POST["confirm"];
+    //$email = $_POST["email"];
+    //$password = $_POST["password"];
+    //$confirm = $_POST["confirm"];
     
-    /* uncomment after creating se() helper and replace with the above 3 lines of code
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
     $confirm = se($_POST, "confirm", "", false);
-     */
 
     //TODO 3.0
     $hasError = false;
