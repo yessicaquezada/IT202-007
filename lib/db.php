@@ -1,4 +1,7 @@
 <?php
+/*
+ * 9/29/2022 - added additional errors to check if the php.ini exists
+ */
 //for this we'll turn on error output so we can try to see any problems on the screen
 //this will be active for any script that includes/requires this one
 ini_set('display_errors', 1);
@@ -23,6 +26,15 @@ function getDB(){
  	    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 	}
    	catch(Exception $e){
+            if($_SERVER['SERVER_NAME'] == "localhost") {
+		        $whichMsg = shell_exec("which php 2>&1");
+		        $whichMsg = substr_replace($whichMsg, ".ini", strlen($whichMsg)-1);
+		        $whichMsg = substr($whichMsg, 2, strlen($whichMsg));
+		        if (!file_exists($whichMsg))
+		            echo "Setup Error: Missing php.ini file.<br>";
+		        else
+                    echo("Did you connect to NJIT's VPN?<br>");
+	        }
             error_log("getDB() error: " . var_export($e, true));
             $db = null;
         }
