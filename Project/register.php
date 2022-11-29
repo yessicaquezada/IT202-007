@@ -117,11 +117,4 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
 ?>
 
 <!-- TODO 5.1: adding flash() -->
-<<<<<<< HEAD
-<?php
-//require(__DIR__ . "/../../partials/flash.php");
-?>
-<?php require_once(__DIR__ . "/../partials/flash.php");
-=======
 <?php require(__DIR__ . "/../../partials/flash.php");
->>>>>>> 45e2bcd045635afe86bea3f389d2c5ca29ce531b
