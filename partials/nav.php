@@ -31,12 +31,12 @@ session_start();
 ?>
 <nav>
     <ul>
-        <?php 
-//TODO 2        if (is_logged_in()) : 
+        <?php if (is_logged_in()) : 
         ?> 
             <li><a href="home.php">Home</a></li>
+            <li><a href="profile.php">Profile</a></li>
         <?php 
-//TODO 2        endif; 
+            endif; 
         ?>
         <?php 
 //TODO 2        if (!is_logged_in()) : 

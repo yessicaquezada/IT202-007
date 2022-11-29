@@ -15,10 +15,15 @@ require_once(__DIR__ . "/../partials/nav.php");
         <label for="confirm">Confirm</label>
         <input type="password" name="confirm" required minlength="8" />
     </div>
+    <div>
+        <label for = "logName">Login Name</label>
+        <input type = "text" name = "logName" required maxlength="30"/>
+    </div>
     <input type="submit" value="Register" />
 </form>
 <script>
-    function validate(form) {
+    function validate(form) 
+    {
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
 
@@ -27,7 +32,8 @@ require_once(__DIR__ . "/../partials/nav.php");
 </script>
 <?php
 //TODO 2: add PHP Code
-if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
+if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"]))
+{
     //$email = $_POST["email"];
     //$password = $_POST["password"];
     //$confirm = $_POST["confirm"];
@@ -35,10 +41,12 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
     $confirm = se($_POST, "confirm", "", false);
+    $logName = se($_POST, "logName", "", false);
 
     //TODO 3.0
     $hasError = false;
-    if (empty($email)) {
+    if (empty($email))
+    {
         //TODO 3.1 flash("Email must not be empty", "danger");
         flash("Email must not be empty");
         $hasError = true;
@@ -55,38 +63,58 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     //TODO 4.0:     $hasError = true;
     //TODO 4.0: }
 
-    if (empty($password)) {
+    if(!preg_match('/^[a-z-9_-]{3, 30}$/', $logName))
+    {
+        flash("Login Name must be lowercase, alphanumerical, and can only contain _ or -", "warning");
+        $hasError = true;
+    }
+
+    if (empty($password)) 
+    {
         flash("Password must not be empty");
         $hasError = true;
     }
-    if (empty($confirm)) {
+
+    if (empty($confirm)) 
+    {
         flash("Confirm password must not be empty");
         $hasError = true;
     }
-    if (strlen($password) < 8) {
+    
+    if (strlen($password) < 8) 
+    {
         flash("Password must be >8 characters");
         $hasError = true;
     }
-    if (strlen($password) > 0 && $password !== $confirm) {
+
+    if (strlen($password) > 0 && $password !== $confirm) 
+    {
         flash("Passwords must match");
         $hasError = true;
     }
-    if (!$hasError) {
+
+    if (!$hasError) 
+    {
         flash("Welcome, $email");
         //TODO 5.0 $hash = password_hash($password, PASSWORD_BCRYPT);
         //TODO 5.0 $db = getDB();
-        //TODO 5.0 $stmt = $db->prepare("INSERT INTO User (email, pwrdHash) VALUES(:email, :password)");
-        //TODO 5.0 try {
-        //TODO 5.0     $stmt->execute([":email" => $email, ":password" => $hash]);
+        $stmt = $db->prepare("INSERT INTO User (email, pwrdHash, logName) VALUES(:email, :password, :logName)");
+            try 
+            {
+                
+                $stmt->execute([":email" => $email, ":password" => $hash, ":logName" => $logName]);
         //TODO 5.0     flash("Successfully registered!");
         //TODO 5.1     flash(with: flash("Successfully registered!", "success"");
-        //TODO 5.0 } catch (Exception $e) {
+         } catch (Exception $e) {
         //TODO 5.0    flash("There was a problem registering<br>");
         //TODO 5.0    flash("<pre>" . var_export($e, true) . "</pre>");
         //TODO 5.1    users_check_duplicate($e->errorInfo);
-        //TODO 5.0 } 
+        
+            } 
     }
 }
+
 ?>
+
 <!-- TODO 5.1: adding flash() -->
 <?php require(__DIR__ . "/../../partials/flash.php");
