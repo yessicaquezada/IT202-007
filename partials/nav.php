@@ -1,5 +1,6 @@
 <?php
-session_start();
+require(__DIR__ . "/../lib/functions.php");
+
 //session_start(); must be the very first line after the <?php otherwise $_SESSION does not persist 
 //Note: this is to resolve cookie issues with port numbers
 
@@ -23,20 +24,19 @@ if (($localWorks && $domain == "localhost") || $domain != "localhost") {
     ]);
 }
 
+session_start();
 //include functions here so we can have it on every page that uses the nav bar
 //that way we don't need to include so many other files on each page
 //nav will pull in functions and functions will pull in db
-
-require(__DIR__ . "/../lib/functions.php");
 ?>
 <nav>
     <ul>
-        <?php 
-//TODO 2        if (is_logged_in()) : 
+        <?php if (is_logged_in()) : 
         ?> 
             <li><a href="home.php">Home</a></li>
+            <li><a href="profile.php">Profile</a></li>
         <?php 
-//TODO 2        endif; 
+            endif; 
         ?>
         <?php 
 //TODO 2        if (!is_logged_in()) : 
