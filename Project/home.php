@@ -14,10 +14,6 @@ if (is_logged_in()) {
     flash("You're not logged in");
 }
 //shows session info
-<<<<<<< HEAD
-//TODO 1 echo "<pre>" . var_export($_SESSION, true) . "</pre>";
-=======
 //TODO 1 flash("<pre>" . var_export($_SESSION, true) . "</pre>");
->>>>>>> 45e2bcd045635afe86bea3f389d2c5ca29ce531b
 ?>
 <?php require_once(__DIR__ . "/../partials/flash.php");
