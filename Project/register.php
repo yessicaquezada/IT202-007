@@ -40,7 +40,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     $hasError = false;
     if (empty($email)) {
         //TODO 3.1 flash("Email must not be empty", "danger");
-        echo "Email must not be empty";
+        flash("Email must not be empty");
         $hasError = true;
     }
     //sanitize
@@ -51,44 +51,42 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
     //TODO 4.0: if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     //TODO 4.1: if (!is_valid_email($email)) {
     //TODO 4.2:     flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
-    //TODO 4.0:     echo "Invalid email address";
+    //TODO 4.0:     flash("Invalid email address");
     //TODO 4.0:     $hasError = true;
     //TODO 4.0: }
 
     if (empty($password)) {
-        echo "Password must not be empty";
+        flash("Password must not be empty");
         $hasError = true;
     }
     if (empty($confirm)) {
-        echo "Confirm password must not be empty";
+        flash("Confirm password must not be empty");
         $hasError = true;
     }
     if (strlen($password) < 8) {
-        echo "Password must be >8 characters";
+        flash("Password must be >8 characters");
         $hasError = true;
     }
     if (strlen($password) > 0 && $password !== $confirm) {
-        echo "Passwords must match";
+        flash("Passwords must match");
         $hasError = true;
     }
     if (!$hasError) {
-        echo "Welcome, $email";
+        flash("Welcome, $email");
         //TODO 5.0 $hash = password_hash($password, PASSWORD_BCRYPT);
         //TODO 5.0 $db = getDB();
         //TODO 5.0 $stmt = $db->prepare("INSERT INTO User (email, pwrdHash) VALUES(:email, :password)");
         //TODO 5.0 try {
         //TODO 5.0     $stmt->execute([":email" => $email, ":password" => $hash]);
-        //TODO 5.0     echo "Successfully registered!";
-        //TODO 5.1     echo with: flash("Successfully registered!", "success");
+        //TODO 5.0     flash("Successfully registered!");
+        //TODO 5.1     flash(with: flash("Successfully registered!", "success"");
         //TODO 5.0 } catch (Exception $e) {
-        //TODO 5.0    echo "There was a problem registering<br>";
-        //TODO 5.0    echo "<pre>" . var_export($e, true) . "</pre>";
+        //TODO 5.0    flash("There was a problem registering<br>");
+        //TODO 5.0    flash("<pre>" . var_export($e, true) . "</pre>");
         //TODO 5.1    users_check_duplicate($e->errorInfo);
         //TODO 5.0 } 
     }
 }
 ?>
 <!-- TODO 5.1: adding flash() -->
-<?php
-//require(__DIR__ . "/../../partials/flash.php");
-?>
+<?php require(__DIR__ . "/../../partials/flash.php");
