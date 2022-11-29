@@ -16,3 +16,4 @@ if (is_logged_in()) {
 //shows session info
 //TODO 1 echo "<pre>" . var_export($_SESSION, true) . "</pre>";
 ?>
+<?php require_once(__DIR__ . "/../partials/flash.php");
