@@ -127,5 +127,5 @@ $username = se($_POST, "username", "", false);
 ?>
 
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../partials/flash.php");
 ?>

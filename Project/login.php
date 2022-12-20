@@ -150,5 +150,5 @@ require(__DIR__ . "/../partials/nav.php");?>
 ?>
 
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../partials/flash.php");
 ?>
