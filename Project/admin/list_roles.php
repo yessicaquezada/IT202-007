@@ -1,26 +1,26 @@
 <?php
 //note we need to go up 1 more directory
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     die(header("Location: $BASE_PATH" . "home.php"));
 }
 //handle the toggle first so select pulls fresh data
-if (isset($_POST["role_id"])) {
-    $role_id = se($_POST, "role_id", "", false);
-    if (!empty($role_id)) {
+if (isset($_POST["roleID"])) {
+    $roleID = se($_POST, "roleID", "", false);
+    if (!empty($roleID)) {
         $db = getDB();
-        $stmt = $db->prepare("UPDATE Roles SET is_active = !is_active WHERE id = :rid");
+        $stmt = $db->prepare("UPDATE Roles SET isActive = !isActive WHERE id = :rid");
         try {
-            $stmt->execute([":rid" => $role_id]);
+            $stmt->execute([":rid" => $roleID]);
             flash("Updated Role", "success");
         } catch (PDOException $e) {
             flash(var_export($e->errorInfo, true), "danger");
         }
     }
 }
-$query = "SELECT id, name, description, is_active from Roles";
+$query = "SELECT id, name, description, isActive from Roles";
 $params = null;
 if (isset($_POST["role"])) {
     $search = se($_POST, "role", "", false);
@@ -44,12 +44,13 @@ try {
 }
 
 ?>
-
 <div class="container-fluid">
-    <h2>List Roles</h2>
-    <form method="POST">
-        <input type="search" name="role" placeholder="Role Filter" />
-        <input type="submit" value="Search"/>
+    <h1>List Roles</h1>
+    <form method="POST" class="row row-cols-lg-auto g-3 align-items-center">
+        <div class="input-group mb-3">
+            <input class="form-control" type="search" name="role" placeholder="Role Filter" />
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </div>
     </form>
     <table class="table">
         <thead>
@@ -70,15 +71,15 @@ try {
                         <td><?php se($role, "id"); ?></td>
                         <td><?php se($role, "name"); ?></td>
                         <td><?php se($role, "description"); ?></td>
-                        <td><?php echo (se($role, "is_active", 0, false) ? "active" : "disabled"); ?></td>
+                        <td><?php echo (se($role, "isActive", 0, false) ? "active" : "disabled"); ?></td>
                         <td>
                             <form method="POST">
-                                <input type="hidden" name="role_id" value="<?php se($role, 'id'); ?>" />
+                                <input type="hidden" name="roleID" value="<?php se($role, 'id'); ?>" />
                                 <?php if (isset($search) && !empty($search)) : ?>
                                     <?php /* if this is part of a search, lets persist the search criteria so it reloads correctly*/ ?>
                                     <input type="hidden" name="role" value="<?php se($search, null); ?>" />
                                 <?php endif; ?>
-                                <input type="submit" value="Toggle" />
+                                <input class="btn btn-primary" type="submit" value="Toggle" />
                             </form>
                         </td>
                     </tr>
@@ -86,8 +87,7 @@ try {
             <?php endif; ?>
         </tbody>
     </table>
-</div>
-<?php
-//note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
-?>
+    <?php
+    //note we need to go up 1 more directory
+    require_once(__DIR__ . "/../../partials/flash.php");
+    ?>

@@ -1,6 +1,6 @@
 <?php
 //note we need to go up 1 more directory
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
@@ -14,7 +14,7 @@ if (isset($_POST["name"]) && isset($_POST["description"])) {
         flash("Name is required", "warning");
     } else {
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Roles (name, description, is_active) VALUES(:name, :desc, 1)");
+        $stmt = $db->prepare("INSERT INTO Roles (name, description, isActive) VALUES(:name, :desc, 1)");
         try {
             $stmt->execute([":name" => $name, ":desc" => $desc]);
             flash("Successfully created role $name!", "success");
@@ -29,7 +29,7 @@ if (isset($_POST["name"]) && isset($_POST["description"])) {
 }
 ?>
 <div class="container-fluid">
-    <h2>Create Role</h2>
+    <h1>Create Role</h1>
     <form method="POST">
         <div class="mb-3">
             <label class="form-label" for="name">Name</label>
@@ -39,10 +39,10 @@ if (isset($_POST["name"]) && isset($_POST["description"])) {
             <label class="form-label" for="d">Description</label>
             <textarea class="form-control" name="description" id="d"></textarea>
         </div>
-        <input type="submit" value="Create Role" />
+        <input type="submit" class="btn btn-primary" value="Create Role" />
     </form>
 </div>
 <?php
 //note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
+require_once(__DIR__ . "/../../partials/flash.php");
 ?>
