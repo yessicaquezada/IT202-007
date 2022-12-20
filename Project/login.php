@@ -21,7 +21,11 @@ if (isset($_POST["save"])) {
     if (!$hasError) {
         $params = [":email" => $email, ":username" => $username, ":id" => get_user_id()]; 
         $db = getDB();
+<<<<<<< HEAD
         $stmt = $db->prepare("UPDATE User set email = :email, logName = :username where id = :id");
+=======
+        $stmt = $db->prepare("SELECT id, email, logName from User where id = :id LIMIT 1");
+>>>>>>> 0a53478cbff66924d129f93bfaffc9096f5d4079
         try {
             $stmt->execute($params);
             flash("Profile saved", "success");
