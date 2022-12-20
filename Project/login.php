@@ -1,19 +1,17 @@
 <?php
-require(__DIR__ . "/../partials/nav.php");
-?>
-<form onsubmit="return validate(this)" method="POST">
+require(__DIR__."/../../partials/nav.php");?>
 <div class="container-fluid">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <form onsubmit="return validate(this)" method="POST">
         <div class="mb-3">
             <label class="form-label" for="email">Username/Email</label>
-            <input class="form-control" type="text" id="email" name="email" required />
+            <input class="form-control" type="text" name="email" required />
         </div>
         <div class="mb-3">
             <label class="form-label" for="pw">Password</label>
             <input class="form-control" type="password" id="pw" name="password" required minlength="8" />
         </div>
-        <input type="submit" class="mt-3 btn btn-primary" value="Login" />
+        <input type="submit" value="Login" />
     </form>
 </div>
 <script>
@@ -21,93 +19,136 @@ require(__DIR__ . "/../partials/nav.php");
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
 
-        //TODO update clientside validation to check if it should
-        //valid email or username
         return true;
     }
 </script>
 <?php
-//TODO 2: add PHP Code
-if (isset($_POST["email"]) && isset($_POST["password"])) {
-    $email = se($_POST, "email", "", false);
-    $password = se($_POST, "password", "", false);
-
-    //TODO 3
-    $hasError = false;
-    if (empty($email)) {
-        flash("Email must not be empty");
-        $hasError = true;
-    }
-//    if (str_contains($email, "@")) {
-    if (is_email($email)) {
+ //TODO 2: add PHP Code
+ if(isset($_POST["email"]) && isset($_POST["password"]))
+ {
+     //get the email key from $_POST, default to "" if not set, and return the value
+     $email = se($_POST, "email","", false);
+     //same as above but for password
+     $password = se($_POST, "password", "", false);
+     //TODO 3: validate/use
+     //$errors = [];
+     $hasErrors = false;
+     if(empty($email)){
+        //array_push($errors, "Email must be set");
+        flash("Email must be set", "danger");
+        $hasErrors = true;
+     }
+     if (str_contains($email, "@")) //if $email is an email --> check for @ symbol
+     {
         //sanitize
-        //$email = filter_var($email, FILTER_SANITIZE_EMAIL);
         $email = sanitize_email($email);
         //validate
-        /*if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            flash("Invalid email address");
-            $hasError = true;
-        }*/
         if (!is_valid_email($email)) {
-            flash("Invalid email address");
+            flash("Invalid email address", "warning");
             $hasError = true;
         }
-    } else {
-        if (!is_valid_username($email)) {
-            flash("Invalid username");
+     } 
+     else //is $email a Username?
+     {
+        if (!preg_match('/^[a-z0-9_-]{3,30}$/i', $email)) {
+            flash("Username must only be alphanumeric and can only contain - or _", "warning");
             $hasError = true;
         }
     }
-    if (empty($password)) {
-        flash("password must not be empty");
-        $hasError = true;
-    }
-    if (!is_valid_password($password)) {
-        flash("Password too short");
-        $hasError = true;
-    }
-    if (!$hasError) {
-        //flash("Welcome, $email");
-        //TODO 4
-        $db = getDB();
-        $stmt = $db->prepare("SELECT id, email, logName, pwrdHash from User 
-        where email = :email or logName = :email");
-        try {
+     /*//sanitize
+     //$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+     $email = sanitize_email($email);
+     //validate
+     //if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+     if(!is_valid_email($email))
+     {
+        //array_push($errors, "Invalid email address");
+        flash("Invalid email address", "warning");
+        $hasErrors = true;
+     }*/
+     
+     if(empty($password)){
+         //array_push($errors, "Password must be set");
+         flash("Password must be set", "danger");
+         $hasErrors = true;
+     }
+     if(strlen($password) < 8){
+         //array_push($errors, "Password must be 8 or more characters");
+         flash("Password must be 8 or more characters", "warning");
+         $hasErrors = true;
+     }
+     //if(count($errors) > 0){
+     //    echo "<pre>" . var_export($errors, true) . "</pre>";
+     //}
+     if($hasErrors)
+     {
+         //Nothing to output... flash will do it
+         //can likely flip the if condition
+     }
+     else
+     {
+         //TODO 4
+         $db = getDB();
+         //lookup our user by email, we must select the password here since mySQL can't do the comparison
+         $stmt = $db->prepare("SELECT id, email, username, password FROM Users WHERE email = :email OR username = :email");
+         try
+         {
             $r = $stmt->execute([":email" => $email]);
-            if ($r) {
+            if($r)
+            {
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                if ($user) {
-                    $hash = $user["pwrdHash"];
-                    unset($user["pwrdHash"]);
-                    if (password_verify($password, $hash)) {
-                        //flash("Weclome $email");
-                        $_SESSION["user"] = $user; //sets our session data from db
-                        //lookup potential roles
-                        $stmt = $db->prepare("SELECT Roles.name FROM Roles 
-                        JOIN UserRoles on Roles.id = UserRoles.roleID 
-                        where UserRoles.userID = :userID and Roles.isActive = 1 and UserRoles.isActive = 1");
-                        $stmt->execute([":userID" => $user["id"]]);
+                //check if we got the user, this returns false if no records matched
+                if($user)
+                {
+                    $hash = $user["password"];
+                    //remove password from the user object so it doesn't leave the scope (avoids password leakage in code)
+                    unset($user["password"]);
+                    if(password_verify($password, $hash))
+                    {
+                       //echo "Welcome, $email";
+                       //flash("Welcome, $email");
+                       $_SESSION["user"] = $user;
+                       //lookup potential roles:
+                       $stmt = $db->prepare("SELECT Roles.name FROM Roles 
+                        JOIN UserRoles on Roles.id = UserRoles.role_id 
+                        where UserRoles.user_id = :user_id and Roles.is_active = 1 and UserRoles.is_active = 1");
+                        $stmt->execute([":user_id" => $user["id"]]);
                         $roles = $stmt->fetchAll(PDO::FETCH_ASSOC); //fetch all since we'll want multiple
                         //save roles or empty array
-                        if ($roles) {
+                        if ($roles) 
+                        {
                             $_SESSION["user"]["roles"] = $roles; //at least 1 role
-                        } else {
+                        } 
+                        else 
+                        {
                             $_SESSION["user"]["roles"] = []; //no roles
                         }
-                        flash("Welcome, " . get_username());
-                        die(header("Location: home.php"));
-                    } else {
-                        flash("Invalid password");
+                       die(header("Location: home.php"));
                     }
-                } else {
-                    flash("Email not found");
+                    else
+                    {  
+                       // echo "Invalid password";
+                       flash("Invalid Password", "danger");
+                    }
+                }
+                else
+                {
+                // echo "Invalid email";
+                flash("Invalid email/username", "danger");
                 }
             }
-        } catch (Exception $e) {
-            flash("<pre>" . var_export($e, true) . "</pre>");
-        }
-    }
-}
+            
+         }
+         catch(Exception $e)
+         {
+            // echo "<pre>" . var_export($e, true) . "</pre>";
+            //flash(var_export($e, true));
+            flash("An unexpected error occurred, please try again", "danger");
+         }
+     }
+ }
 ?>
+
 <?php
-require(__DIR__ . "/../partials/flash.php");
+require(__DIR__ . "/../../partials/flash.php");
+?>

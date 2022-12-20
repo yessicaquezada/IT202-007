@@ -32,27 +32,22 @@
         flash(var_export($e->errorInfo, true), "danger");
     }
 
-    if (isset($_POST["account_id"]) && isset($_POST["withdraw"])) 
+    if (isset($_POST["account_id"]) && isset($_POST["deposit"])) 
     {
-        $withdraw = (int)se($_POST, "withdraw", "", false);
+        $deposit = (int)se($_POST, "deposit", "", false);
         $aid = se($_POST, "account_id", "", false);
         $wid = get_world_id();
+        //flash("world id = $wid");
         $memo = $_POST["memo"];
-        $balance = get_account_balance($aid);
-        //flash("balance = $balance");
-        if (!($withdraw > 0))
+        if (!($deposit > 0))
         {
-            flash("Input a value to withdraw (Greater than 0)", "warning");
-        }
-        else if($withdraw > get_account_balance($aid))
-        {
-            flash("Insufficient Funds", "warning");
+            flash("Input a value to deposit (Greater than 0)", "warning");
         }
         else
         {
-            change_balance($withdraw, "withdraw",$aid, $aid, $wid, $memo);
+            change_balance($deposit, "deposit",$aid, $wid, $aid, $memo);
             refresh_account_balance($aid);
-            flash("Withdraw was successful", "success");
+            flash("Deposit was successful", "success");
             die(header("Location: " . get_url("my_accounts.php")));
         }
     }
@@ -61,11 +56,11 @@
 ?>
 
 <div class="container-fluid">
-    <h2>Withdraw</h2>
+    <h2>Deposit</h2>
     <div>
         <form method="POST">
             <div class="mb-3">
-                <label for="accountList" class="form-label">Choose an Account to Withdraw Money To</label>
+                <label for="accountList" class="form-label">Choose an Account to Deposit Money To</label>
                 <select class="form-select" name="account_id" id="accountList" autocomplete="off">
                 <?php if (!empty($accounts)) : ?>
                     <?php foreach ($accounts as $account) : ?>
@@ -76,14 +71,14 @@
                 <?php endif; ?> 
             </div>
             <div class="mb-3">
-                <label class="form-label" for="d">Amount to Withdraw</label>
-                <input class="form-control" type="number" name="withdraw" id="d"></input>
+                <label class="form-label" for="d">Amount to Deposit</label>
+                <input class="form-control" type="number" name="deposit" id="d"></input>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="m">Memo</label>
-                <input class="form-control" type="text" placeholder="Withdraw" aria-label="default input example" name="memo">
+                <input class="form-control" type="text" placeholder="Deposit" aria-label="default input example" name="memo">
             </div>
-            <input type="submit" value="Withdraw" />
+            <input type="submit" value="Deposit" />
         </form>
     </div>
 </div>
