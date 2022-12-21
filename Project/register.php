@@ -1,8 +1,7 @@
 <?php
-require(__DIR__ . "/../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 reset_session();
 ?>
-<form onsubmit="return validate(this)" method="POST">
 <div class="container-fluid">
     <h1>Register</h1>
     <form onsubmit="return validate(this)" method="POST">
@@ -25,12 +24,11 @@ reset_session();
         <input type="submit" class="mt-3 btn btn-primary" value="Register" />
     </form>
 </div>
-
 <script>
     function validate(form) {
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
-
+        ////you validate email/password/username/confirm/etc (hint, maybe try to mimic the php validation)
         return true;
     }
 </script>
@@ -55,11 +53,11 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         $hasError = true;
     }
     if (!is_valid_username($username)) {
-        flash("Login Name must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
+        flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
         $hasError = true;
     }
     if (empty($password)) {
-        flash("Password must not be empty", "danger");
+        flash("password must not be empty", "danger");
         $hasError = true;
     }
     if (empty($confirm)) {
@@ -80,7 +78,7 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
         //TODO 4
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO User (email, pwrdHash, logName) VALUES(:email, :password, :username)");
+        $stmt = $db->prepare("INSERT INTO Users (email, password, username) VALUES(:email, :password, :username)");
         try {
             $stmt->execute([":email" => $email, ":password" => $hash, ":username" => $username]);
             flash("Successfully registered!", "success");
@@ -91,5 +89,5 @@ if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm
 }
 ?>
 <?php
-require(__DIR__ . "/../partials/flash.php");
+require(__DIR__ . "/../../partials/flash.php");
 ?>

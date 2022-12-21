@@ -16,8 +16,3 @@ function is_valid_password($password)
 {
     return strlen($password) >= 8;
 }
-function is_email($email)
-{
-    //return str_contains($email, "@");
-    return preg_match('/@/', $email);
-}
