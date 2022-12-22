@@ -1,49 +1,39 @@
 <?php
 
-/**
- * Passing $redirect as true will auto redirect a logged out user to the $destination.
- * The destination defaults to login.php
- */
-function is_logged_in($redirect = false, $destination = "login.php")
+function update_data($table, $id,  $data, $ignore = ["id", "submit"])
 {
-    $isLoggedIn = isset($_SESSION["user"]);
-    if ($redirect && !$isLoggedIn) {
-        //if this triggers, the calling script won't receive a reply since die()/exit() terminates it
-        flash("You must be logged in to view this page", "warning");
-        //die(header("Location: $destination"));
-        redirect($destination);
-    }
-    return $isLoggedIn;
-}
-function has_role($role)
-{
-    if (is_logged_in() && isset($_SESSION["user"]["roles"])) {
-        foreach ($_SESSION["user"]["roles"] as $r) {
-            if ($r["name"] === $role) {
-                return true;
-            }
+    $columns = array_keys($data);
+    //again just another example of removing values from an array
+    //there's no purpose behind my choice between this file and add_data other than demonstration
+    foreach ($columns as $index => $value) {
+        //Note: normally it's bad practice to remove array elements during iteration
+
+        //remove id, we'll use this for the WHERE not for the SET
+        //remove submit, it's likely not in your table
+        if (in_array($value, $ignore)) {
+            unset($columns[$index]);
         }
     }
-    return false;
-}
-function get_username()
-{
-    if (is_logged_in()) { //we need to check for login first because "user" key may not exist
-        return se($_SESSION["user"], "username", "", false);
+    $query = "UPDATE $table SET "; //be sure you trust $table
+    $cols = [];
+    foreach ($columns as $index => $col) {
+        array_push($cols, "$col = :$col");
     }
-    return "";
-}
-function get_user_email()
-{
-    if (is_logged_in()) { //we need to check for login first because "user" key may not exist
-        return se($_SESSION["user"], "email", "", false);
+    $query .= join(",", $cols);
+    $query .= " WHERE id = :id";
+
+    $params = [":id" => $id];
+    foreach ($columns as $col) {
+        $params[":$col"] = se($data, $col, "", false);
     }
-    return "";
-}
-function get_user_id()
-{
-    if (is_logged_in()) { //we need to check for login first because "user" key may not exist
-        return se($_SESSION["user"], "id", false, false);
+    $db = getDB();
+    $stmt = $db->prepare($query);
+    try {
+        $stmt->execute($params);
+        return true;
+    } catch (PDOException $e) {
+        error_log(var_export($e->errorInfo, true));
+        flash("Error updating table", "danger");
+        return false;
     }
-    return false;
 }

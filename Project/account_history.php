@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../partials/nav.php");
 
 //TODO create lookup query and fetch results, set them to $results
 ?>
@@ -30,5 +30,5 @@ require_once(__DIR__ . "/../../partials/nav.php");
 <?php endif; ?>
 
 <?php
-require_once(__DIR__ . "/../../partials/flash.php");
+require_once(__DIR__ . "/../partials/flash.php");
 ?>

@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../partials/nav.php");
 if (isset($_POST["deposit"])) {
     //insert into Accounts user_id, null account number, account_type
     //left pad last insert id to make an accont number
@@ -19,5 +19,5 @@ if (isset($_POST["deposit"])) {
     </form>
 </div>
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../partials/flash.php");
 ?>

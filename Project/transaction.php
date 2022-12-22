@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../../partials/nav.php");
+require_once(__DIR__ . "/../partials/nav.php");
 
 //TODO get list of user's accounts for the dropdown(s)
 //deposit/withdraw needs 1 dropdown
@@ -32,5 +32,5 @@ if (isset($_REQUEST["type"])) {
     <input type="submit" value="Save" class="btn btn-info" />
 </form>
 <?php
-require_once(__DIR__ . "/../../partials/flash.php");
+require_once(__DIR__ . "/../partials/flash.php");
 ?>

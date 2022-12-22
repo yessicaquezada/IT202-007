@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../partials/nav.php");
 ?>
 <div class="container-fluid">
     <h1>Login</h1>
@@ -106,4 +106,4 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     }
 }
 ?>
-<?php require_once(__DIR__ . "/../../partials/flash.php");
+<?php require_once(__DIR__ . "/../partials/flash.php");

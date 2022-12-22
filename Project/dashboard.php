@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../partials/nav.php");
 ?>
 <div class="container-fluid">
     <h1>Dashboard</h1>
@@ -8,5 +8,5 @@ require(__DIR__ . "/../../partials/nav.php");
     </div>
 </div>
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../partials/flash.php");
 ?>

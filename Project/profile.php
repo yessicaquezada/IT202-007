@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../partials/nav.php");
 is_logged_in(true);
 //handle public profile
 $user_id = (int)se($_GET, "id", get_user_id(), false);
@@ -176,5 +176,5 @@ try {
     }
 </script>
 <?php
-require_once(__DIR__ . "/../../partials/flash.php");
+require_once(__DIR__ . "/../partials/flash.php");
 ?>
