@@ -12,7 +12,7 @@ require(__DIR__ . "/../partials/nav.php");
     View My Accounts
   </a>
   <a href="<?php echo get_url('withdraw.php'); ?>" class="list-group-item list-group-item-action">Withdraw</a>
-  <a href="<?php echo get_url('my_accounts.php'); ?>" class="list-group-item list-group-item-action active" aria-current="true">
+  <a href="<?php echo get_url('deposit.php'); ?>" class="list-group-item list-group-item-action active" aria-current="true">
     Deposit
   </a>
   <a href="<?php echo get_url('externaltransfer.php'); ?>" class="list-group-item list-group-item-action">External Transfer</a>
