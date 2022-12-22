@@ -10,7 +10,8 @@ function is_logged_in($redirect = false, $destination = "login.php")
     if ($redirect && !$isLoggedIn) {
         //if this triggers, the calling script won't receive a reply since die()/exit() terminates it
         flash("You must be logged in to view this page", "warning");
-        die(header("Location: $destination"));
+        //die(header("Location: $destination"));
+        redirect($destination);
     }
     return $isLoggedIn;
 }
@@ -28,7 +29,7 @@ function has_role($role)
 function get_username()
 {
     if (is_logged_in()) { //we need to check for login first because "user" key may not exist
-        return se($_SESSION["user"], "logName", "", false);
+        return se($_SESSION["user"], "username", "", false);
     }
     return "";
 }
